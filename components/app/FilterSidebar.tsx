@@ -8,6 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Mail } from "lucide-react";
+import { Badge } from "../ui/badge";
 
 const FilterSidebar = () => {
   return (
@@ -72,6 +74,36 @@ const FilterSidebar = () => {
 
           {/* Generate Button */}
           <Button className="w-full text-white">Generate Ideas ✨</Button>
+        </CardContent>
+      </Card>
+
+      <Card className="mt-6 border-none shadow-none p-0">
+        <CardHeader className="p-0">
+          <CardTitle className="text-sm font-semibold flex items-center gap-2">
+            <p className="text-gray-500">
+              Got suggestions or recommendations? Feel free to email me at
+              johntapang18@gmail.com
+            </p>
+          </CardTitle>
+        </CardHeader>
+
+        <CardContent className="space-y-6 p-0 -mt-4">
+          <div>
+            <h3 className="text-sm mb-2 text-gray-500">Built With:</h3>
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="secondary">Next.js</Badge>
+              <Badge variant="secondary">ShadCN UI</Badge>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-200 pt-4 text-sm text-gray-500 space-y-1">
+            <p>
+              Website inspired by <span className="font-medium">Bryl Lim</span>
+            </p>
+            <p>
+              Developed by <span className="font-medium">John Tapang</span>
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>

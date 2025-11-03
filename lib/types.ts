@@ -5,7 +5,14 @@ export type ResearchType = {
   description: string;
   researchScope: string;
   suggestedRoles: string[];
-  similarProjects: string[];
+  //   similarProjects: {
+  //     title: string;
+  //     link: string;
+  //   }[];
+  similarProjects: {
+    title: string;
+    link: string;
+  }[];
   researchIndustry: string;
   researchStudy: string;
   researchType: string;

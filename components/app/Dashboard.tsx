@@ -3,9 +3,9 @@ import PreviewCard from "./PreviewCard";
 
 export default function ResearchGenerator() {
   return (
-    <main className="min-h-screen py-8">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto space-y-6">
+    <main className="min-h-screen py-12">
+      <div className="container mx-auto px-4 auto">
+        <div className="max-w-6xl mx-auto space-y-8">
           {/* Header */}
           <div className="text-center space-y-2">
             <h1 className="text-5xl font-bold text-gray-900">
@@ -22,7 +22,7 @@ export default function ResearchGenerator() {
 
             {/* Main Content */}
             <div className="lg:col-span-3 space-y-4">
-              <PreviewCard />
+              <PreviewCard researchData={null} />
             </div>
           </div>
         </div>

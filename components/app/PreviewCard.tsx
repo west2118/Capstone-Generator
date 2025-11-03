@@ -9,78 +9,159 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Clock } from "lucide-react";
+import { Clock, FileSearch } from "lucide-react";
+import { ResearchType } from "@/lib/types";
+import Link from "next/link";
+import NoDataCard from "./research-create/NoDataCard";
 
-const PreviewCard = () => {
+type PreviewDataProps = {
+  researchData: ResearchType | null;
+  isCreate?: boolean;
+};
+
+const PreviewCard = ({ researchData, isCreate = false }: PreviewDataProps) => {
+  const validProjects =
+    researchData?.similarProjects?.filter((item) => item.title || item.link) ||
+    [];
+
+  const isEmptyData =
+    !researchData?.title?.trim() &&
+    !researchData?.description?.trim() &&
+    !researchData?.duration?.trim() &&
+    !researchData?.difficulty?.trim() &&
+    !researchData?.researchIndustry?.trim() &&
+    !researchData?.researchScope?.trim() &&
+    !researchData?.researchStudy?.trim() &&
+    !researchData?.researchType?.trim() &&
+    (!researchData?.technologies || researchData.technologies.length === 0) &&
+    (!researchData?.suggestedRoles ||
+      researchData.suggestedRoles.length === 0) &&
+    (!researchData?.similarProjects ||
+      researchData.similarProjects.every(
+        (p) => !p.title?.trim() && !p.link?.trim()
+      ));
+
+  if (isEmptyData) {
+    return (
+      <Card className="shadow-lg h-full">
+        <CardContent className="flex items-center justify-center h-full">
+          <NoDataCard />
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="shadow-lg h-full">
       <CardContent className="px-6 h-full flex flex-col">
         {/* Project Content */}
         <div className="flex-1">
           {/* Project Header */}
-          <div className="mb-4">
-            <h2 className="text-2xl font-bold text-gray-900">
-              Blockchain-based Intellectual Property Registry
-            </h2>
-            <div className="flex flex-wrap gap-2 mt-2">
-              <Badge variant="secondary">Ethereum</Badge>
-              <Badge variant="secondary">Safety</Badge>
-              <Badge variant="secondary">IPFS</Badge>
-              <Badge variant="secondary">React</Badge>
+          {(researchData?.title || researchData?.technologies) && (
+            <div className="mb-4">
+              {researchData?.title && (
+                <h2 className="text-2xl font-bold text-gray-900">
+                  {researchData?.title}
+                </h2>
+              )}
+              {researchData?.technologies && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {researchData?.technologies.map((item) => (
+                    <Badge key={item} variant="secondary">
+                      {item}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
+          )}
 
-          <div className="text-md font-semibold text-gray-600 flex items-center space-x-2 mb-4">
-            <Clock className="w-4 h-4" />
-            <span>5-7 months</span>
-          </div>
+          {researchData?.duration && (
+            <div className="text-md font-semibold text-gray-600 flex items-center space-x-2 mb-4">
+              <Clock className="w-4 h-4" />
+              <span>{researchData?.duration}</span>
+            </div>
+          )}
 
-          {/* Project Description */}
-          <p className="text-gray-600 mb-6 leading-relaxed">
-            Develop a decentralized platform for registering and managing
-            intellectual property rights using blockchain technology, ensuring
-            transparency and reducing disputes.
-          </p>
+          {researchData?.description && (
+            <p className="text-gray-600 mb-2 leading-relaxed">
+              {researchData?.description}
+            </p>
+          )}
+
+          {researchData?.researchScope && (
+            <p className="text-gray-600 mb-6 leading-relaxed">
+              {researchData?.researchScope}
+            </p>
+          )}
 
           {/* Project Details */}
-          <div className="grid grid-cols-2 gap-8 mb-6">
-            <div>
-              <h4 className="font-semibold mb-3">Suggested Roles:</h4>
-              <ul className="text-gray-600 space-y-1">
-                <li>Blockchain Developer</li>
-                <li>Full Stack Developer</li>
-                <li>Legal Expert</li>
-              </ul>
+          {(researchData?.suggestedRoles || researchData?.similarProjects) && (
+            <div className="grid grid-cols-2 gap-8 mb-6">
+              {researchData?.suggestedRoles.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-3">Suggested Roles:</h4>
+                  <ul className="text-gray-600 space-y-1">
+                    {researchData?.suggestedRoles.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {validProjects.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-3">Similar Projects:</h4>
+                  <ul className="text-gray-600 space-y-1">
+                    {researchData?.similarProjects.map((item) => (
+                      <li key={item.title}>
+                        <Link href={item.link} className="underline">
+                          {item.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
-            <div>
-              <h4 className="font-semibold mb-3">Similar Projects:</h4>
-              <ul className="text-gray-600 space-y-1">
-                <li>Pwc of</li>
-                <li>Brenskin of</li>
-              </ul>
-            </div>
-          </div>
+          )}
 
           {/* Project Tags */}
-          <div className="border-t pt-4">
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="outline" className="px-3 py-1">
-                Legal Tech
-              </Badge>
-              <Badge variant="outline" className="px-3 py-1">
-                Web Application
-              </Badge>
-              <Badge variant="outline" className="px-3 py-1">
-                Advanced
-              </Badge>
+          {(researchData?.researchIndustry ||
+            researchData?.researchStudy ||
+            researchData?.researchType ||
+            researchData?.difficulty) && (
+            <div className="border-t pt-4">
+              <div className="flex flex-wrap gap-2">
+                {researchData?.researchIndustry && (
+                  <Badge variant="outline" className="px-3 py-1">
+                    {researchData?.researchIndustry}
+                  </Badge>
+                )}
+                {researchData?.researchStudy && (
+                  <Badge variant="outline" className="px-3 py-1">
+                    {researchData?.researchStudy}
+                  </Badge>
+                )}
+                {researchData?.researchType && (
+                  <Badge variant="outline" className="px-3 py-1">
+                    {researchData?.researchType}
+                  </Badge>
+                )}
+                {researchData?.difficulty && (
+                  <Badge variant="outline" className="px-3 py-1">
+                    {researchData?.difficulty}
+                  </Badge>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
-        {/* Button at bottom-right */}
-        <div className="flex justify-end items-center mt-auto">
-          <Button>Next Idea</Button>
-        </div>
+        {!isCreate && (
+          <div className="flex justify-end items-center mt-auto">
+            <Button>Next Idea</Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
