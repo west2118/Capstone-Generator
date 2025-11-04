@@ -36,6 +36,17 @@ const SimilarProjectInput = ({
     }));
   };
 
+  const handlePaste = async () => {
+    const text = await navigator.clipboard.readText();
+
+    setFormData((prev) => ({
+      ...prev,
+      similarProjects: prev.similarProjects.map((proj, i) =>
+        i === index ? { ...proj, link: text } : proj
+      ),
+    }));
+  };
+
   return (
     <div className="flex gap-2">
       {/* Project Title */}
@@ -55,7 +66,11 @@ const SimilarProjectInput = ({
           type="url"
           className="flex-1"
         />
-        <Button type="button" variant="outline" className="text-sm">
+        <Button
+          onClick={handlePaste}
+          type="button"
+          variant="outline"
+          className="text-sm">
           Paste
         </Button>
       </div>

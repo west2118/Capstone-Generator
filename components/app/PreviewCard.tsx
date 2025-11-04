@@ -19,7 +19,7 @@ type PreviewDataProps = {
   isCreate?: boolean;
 };
 
-const PreviewCard = ({ researchData, isCreate = false }: PreviewDataProps) => {
+const PreviewCard = ({ researchData, isCreate = true }: PreviewDataProps) => {
   const validProjects =
     researchData?.similarProjects?.filter((item) => item.title || item.link) ||
     [];
@@ -112,8 +112,8 @@ const PreviewCard = ({ researchData, isCreate = false }: PreviewDataProps) => {
                 <div>
                   <h4 className="font-semibold mb-3">Similar Projects:</h4>
                   <ul className="text-gray-600 space-y-1">
-                    {researchData?.similarProjects.map((item) => (
-                      <li key={item.title}>
+                    {researchData?.similarProjects.map((item, index) => (
+                      <li key={item.title + index}>
                         <Link href={item.link} className="underline">
                           {item.title}
                         </Link>

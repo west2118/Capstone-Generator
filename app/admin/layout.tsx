@@ -13,7 +13,7 @@ export default function AdminLayout({
       <Sidebar />
 
       {/* Main content */}
-      <main className="flex min-h-screen bg-white">
+      <main className="min-h-screen flex-1 flex flex-col">
         <div className="flex-1 overflow-y-auto p-4">{children}</div>
       </main>
     </div>
