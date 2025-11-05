@@ -1,11 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputForm from "@/components/app/research-create/InputForm";
 import PreviewCard from "@/components/app/PreviewCard";
 import { ResearchType } from "@/lib/types";
 
-export default function InputPreviewClient() {
+export default function InputPreviewClient({
+  research,
+  isEdit,
+}: {
+  research?: ResearchType;
+  isEdit: boolean;
+}) {
   const [formData, setFormData] = useState<ResearchType>({
     title: "",
     technologies: [],
@@ -20,11 +26,24 @@ export default function InputPreviewClient() {
     difficulty: "",
   });
 
+  useEffect(() => {
+    if (research) {
+      setFormData({
+        ...research,
+      });
+    }
+  }, [research]);
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
       {/* Input Form */}
       <div className="lg:col-span-2 space-y-4">
-        <InputForm formData={formData} setFormData={setFormData} />
+        <InputForm
+          formData={formData}
+          setFormData={setFormData}
+          isEdit={isEdit}
+          researchId={research?._id ?? ""}
+        />
       </div>
 
       {/* Output Preview */}

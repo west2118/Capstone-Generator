@@ -39,9 +39,16 @@ import axios from "axios";
 type InputFormProps = {
   formData: ResearchType;
   setFormData: React.Dispatch<React.SetStateAction<ResearchType>>;
+  isEdit: boolean;
+  researchId: string;
 };
 
-const InputForm = ({ formData, setFormData }: InputFormProps) => {
+const InputForm = ({
+  formData,
+  setFormData,
+  isEdit = false,
+  researchId,
+}: InputFormProps) => {
   const router = useRouter();
 
   const handleChange = (
@@ -69,10 +76,16 @@ const InputForm = ({ formData, setFormData }: InputFormProps) => {
     }));
   };
 
+  // I didn't now first that I can just use the (useTransition)
   const mutation = useMutation({
     mutationFn: async (formData: ResearchType) => {
-      const res = await axios.post("/api/research/postResearch", formData);
-      return res.data;
+      if (isEdit) {
+        const res = await axios.put(`/api/research/${researchId}`, formData);
+        return res.data;
+      } else {
+        const res = await axios.post("/api/research", formData);
+        return res.data;
+      }
     },
     onSuccess: (result) => {
       if (result.success) {
@@ -149,6 +162,7 @@ const InputForm = ({ formData, setFormData }: InputFormProps) => {
         <div className="space-y-2">
           <Label htmlFor="duration">Project Duration</Label>
           <Select
+            value={formData.duration}
             onValueChange={(value) =>
               setFormData((prev) => ({ ...prev, duration: value }))
             }>
@@ -243,6 +257,7 @@ const InputForm = ({ formData, setFormData }: InputFormProps) => {
         <div className="space-y-2">
           <Label htmlFor="researchIndustry">Research Industry</Label>
           <Select
+            value={formData.researchIndustry}
             onValueChange={(value) =>
               setFormData((prev) => ({ ...prev, researchIndustry: value }))
             }>
@@ -263,6 +278,7 @@ const InputForm = ({ formData, setFormData }: InputFormProps) => {
         <div className="space-y-2">
           <Label htmlFor="researchStudy">Research Study</Label>
           <Select
+            value={formData.researchStudy}
             onValueChange={(value) =>
               setFormData((prev) => ({ ...prev, researchStudy: value }))
             }>
@@ -282,6 +298,7 @@ const InputForm = ({ formData, setFormData }: InputFormProps) => {
         <div className="space-y-2">
           <Label htmlFor="researchType">Research Type</Label>
           <Select
+            value={formData.researchType}
             onValueChange={(value) =>
               setFormData((prev) => ({ ...prev, researchType: value }))
             }>
@@ -301,6 +318,7 @@ const InputForm = ({ formData, setFormData }: InputFormProps) => {
         <div className="space-y-2">
           <Label htmlFor="researchDifficulty">Research Difficulty</Label>
           <Select
+            value={formData.difficulty}
             onValueChange={(value) =>
               setFormData((prev) => ({ ...prev, difficulty: value }))
             }>
@@ -327,8 +345,10 @@ const InputForm = ({ formData, setFormData }: InputFormProps) => {
               <Loader className="animate-spin h-5 w-5" />
               Submitting...
             </>
+          ) : isEdit ? (
+            "Update Research"
           ) : (
-            "Submit"
+            "Submit Research"
           )}
         </Button>
       </CardContent>

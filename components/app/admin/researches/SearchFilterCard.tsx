@@ -69,16 +69,6 @@ const SearchFilterCard = () => {
                 </SelectContent>
               </Select>
             </div>
-
-            {/* More Filters Button */}
-            <div className="flex justify-end">
-              <Button
-                variant="outline"
-                className="border-gray-300 text-gray-700 h-[42px] w-full md:w-[140px]">
-                <Filter className="h-4 w-4 mr-2" />
-                More Filters
-              </Button>
-            </div>
           </div>
         </CardContent>
       </Card>

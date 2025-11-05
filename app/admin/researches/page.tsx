@@ -1,8 +1,16 @@
 import { getResearches } from "@/app/actions/research";
 import ResearchContent from "@/components/app/admin/researches/ResearchContent";
 
-export default async function ResearchPage() {
-  const data = await getResearches();
+export default async function ResearchPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const page = Number(params?.page) || 1;
+  const limit = 9;
+
+  const data = await getResearches(page, limit);
 
   return (
     <div className="p-4">
@@ -20,7 +28,13 @@ export default async function ResearchPage() {
       </div>
 
       {/* Main Content */}
-      <ResearchContent researches={data?.researches} />
+      <ResearchContent
+        researches={data.researches}
+        total={data.total}
+        totalPages={data.totalPages}
+        page={data.page ?? 1}
+        limit={data.limit ?? 9}
+      />
     </div>
   );
 }

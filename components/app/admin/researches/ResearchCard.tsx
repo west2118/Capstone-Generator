@@ -26,14 +26,20 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { ResearchType } from "@/lib/types";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const ResearchCard = ({
   research,
   handleOpenModal,
+  handleDeleteModal,
 }: {
   research: any;
   handleOpenModal: (researchData: ResearchType) => void;
+  handleDeleteModal: (researchId: string) => void;
 }) => {
+  const router = useRouter();
+
   return (
     <Card className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col">
       <CardHeader className="pb-4 flex justify-between items-start">
@@ -58,8 +64,16 @@ const ResearchCard = ({
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-32">
-            <DropdownMenuItem className="cursor-pointer">Edit</DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={() =>
+                router.push(`/admin/research-edit/${research._id}`)
+              }
+              className="cursor-pointer">
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => handleDeleteModal(research._id)}
+              className="cursor-pointer">
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
