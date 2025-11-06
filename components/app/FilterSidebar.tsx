@@ -8,10 +8,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Mail } from "lucide-react";
 import { Badge } from "../ui/badge";
+import {
+  listResearchDifficulty,
+  listResearchIndustries,
+  listResearchTypes,
+} from "@/lib/constants";
+import { Loader } from "lucide-react";
 
-const FilterSidebar = () => {
+type FilterSidebarProps = {
+  filters: {
+    industry: string;
+    type: string;
+    difficulty: string;
+  };
+  updateFilters: (key: string, value: string) => void;
+  handleGenerate: () => void;
+  isPending: boolean;
+};
+
+const FilterSidebar = ({
+  filters,
+  updateFilters,
+  handleGenerate,
+  isPending,
+}: FilterSidebarProps) => {
   return (
     <div className="lg:col-span-2">
       <Card className="shadow-lg">
@@ -22,15 +43,19 @@ const FilterSidebar = () => {
           {/* Industry */}
           <div className="space-y-2">
             <Label className="font-semibold">Industry</Label>
-            <Select>
+            <Select
+              value={filters.industry}
+              onValueChange={(value) => updateFilters("industry", value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="All Industries" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Industries</SelectItem>
-                <SelectItem value="ai">AI</SelectItem>
-                <SelectItem value="finance">Finance</SelectItem>
-                <SelectItem value="health">Health</SelectItem>
+                {listResearchIndustries.map((item) => (
+                  <SelectItem key={item} value={item}>
+                    {item}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -38,15 +63,19 @@ const FilterSidebar = () => {
           {/* Project Type */}
           <div className="space-y-2">
             <Label className="font-semibold">Project Type</Label>
-            <Select>
+            <Select
+              value={filters.type}
+              onValueChange={(value) => updateFilters("type", value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="All Project Type" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Project Type</SelectItem>
-                <SelectItem value="web">Web App</SelectItem>
-                <SelectItem value="mobile">Mobile App</SelectItem>
-                <SelectItem value="desktop">Desktop App</SelectItem>
+                {listResearchTypes.map((item) => (
+                  <SelectItem key={item} value={item}>
+                    {item}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -56,24 +85,39 @@ const FilterSidebar = () => {
             <Label className="font-semibold text-gray-700">Difficulty</Label>
             <div className="flex items-center justify-between bg-gray-100 rounded-md p-1">
               <Button
-                variant="default"
-                className="text-white px-3 py-1 text-sm">
+                onClick={() => updateFilters("difficulty", "all")}
+                variant={`${
+                  filters.difficulty === "all" ? "default" : "ghost"
+                }`}
+                className={`text-sm px-3 py-1 ${
+                  filters.difficulty === "all" ? "text-white" : "text-gray-700"
+                }`}>
                 All
               </Button>
-              <Button variant="ghost" className="text-gray-700 text-sm">
-                Beginner
-              </Button>
-              <Button variant="ghost" className="text-gray-700 text-sm">
-                Intermediate
-              </Button>
-              <Button variant="ghost" className="text-gray-700 text-sm">
-                Advanced
-              </Button>
+              {listResearchDifficulty.map((item) => (
+                <Button
+                  onClick={() => updateFilters("difficulty", item)}
+                  key={item}
+                  variant={`${
+                    filters.difficulty === item ? "default" : "ghost"
+                  }`}
+                  className={`text-sm ${
+                    filters.difficulty === item ? "text-white" : "text-gray-700"
+                  }`}>
+                  {item}
+                </Button>
+              ))}
             </div>
           </div>
 
           {/* Generate Button */}
-          <Button className="w-full text-white">Generate Ideas ✨</Button>
+          <Button
+            disabled={isPending}
+            onClick={handleGenerate}
+            className="w-full text-white">
+            {isPending ? <Loader className="animate-spin h-5 w-5" /> : ""}
+            Generate Ideas ✨
+          </Button>
         </CardContent>
       </Card>
 

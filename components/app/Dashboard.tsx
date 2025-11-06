@@ -1,5 +1,4 @@
-import FilterSidebar from "./FilterSidebar";
-import PreviewCard from "./PreviewCard";
+import DashboardContent from "./DashboardContent";
 
 export default function ResearchGenerator() {
   return (
@@ -16,15 +15,7 @@ export default function ResearchGenerator() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-            {/* Filters Sidebar */}
-            <FilterSidebar />
-
-            {/* Main Content */}
-            <div className="lg:col-span-3 space-y-4">
-              <PreviewCard researchData={null} />
-            </div>
-          </div>
+          <DashboardContent />
         </div>
       </div>
     </main>
